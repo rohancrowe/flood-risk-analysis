@@ -1,0 +1,5 @@
+# Ignore raw NRFA datasets
+data/raw/*.csv
+
+# Keep the folder structure
+!data/raw/README.md

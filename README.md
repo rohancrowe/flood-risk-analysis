@@ -41,7 +41,7 @@ The average time to rise is calculated by taking the mean of the time from troug
 
 Test 1 is hard to implement. How do we calculate any single "time to rise"? Using guidance from the Flood Estimation Handbook, we find n single-peaked events, find their time to rise, and average them. To calculate a single-peaked time to rise we look at the closest previous trough and the peak and find the time between them. We'll define a single peaked event as having its two neighbouring troughs below the mean flow rate of the river, ie back to normal river flow behaviour. The figure below should justify this working:
 
-![2010 River Flow](flood-risk-analysis/results/figures/2010.png)
+![2010 River Flow](flood-risk-analysis/results/2010.png)
 
 We can see single-peaked events have neighbouring troughs that are below the mean flow rate.
 
@@ -50,6 +50,8 @@ We can see single-peaked events have neighbouring troughs that are below the mea
 ### distribution fitting
 
 ### statistical tests
+
+![QQ Plot](flood-risk-analysis/results/QQ_plot.png)
 
 ## results
 

@@ -26,23 +26,23 @@ The generalised Pareto distribtion (GPD) is fit to the data using the MLEs.
 
 ### Data processing
 
+As we can see, data from all of 1977 and 1978 is missing (is confirmed in the code). We need to look at the data from the end of 1976 and the start of 1979. If it looks like we are in the vicinity of a peak there, it may be necessary to also remove this peak from the dataset, as we do not know what the behaviour of the peak was like over when we move over the cut line. There is not much hope in analytically continuing the time series due to the high level of uncertainty in metereological effects that we would have to consider.
+
 ![Overall River Flow Time Series](results/figures/overall_time_series.png)
 
-As we can see, data from all of 1977 and 1978 is missing (is confirmed in the code). We need to look at the data from the end of 1976 and the start of 1979. If it looks like we are in the vicinity of a peak there, it may be necessary to also remove this peak from the dataset, as we do not know what the behaviour of the peak was like over when we move over the cut line. There is not much hope in analytically continuing the time series due to the high level of uncertainty in metereological effects that we would have to consider.
+Treating high river flow periods (floods) as independent events, our worry might be that the 1977 or 1978 cut would be in the middle of a flood. If this happened, what remained of these flood events in the time series would have to be removed because there would be uncertainty about the behaviour of the flood event when there weren't records (during 1977-1978). We wouldn't know how high the river flow peaked at, and therefore what peak flow to record when extracting the peaks. As it turns out, the last and first (respectively) flows of 1977 and 1978 are not part of flood events as can be seen in the graphs.
 
 ![1977 Cut Analysis](results/figures/1977_cut_analysis.png)
 
 ![1978 Cut Analysis](results/figures/1978_cut_analysis.png)
 
-Treating high river flow periods (floods) as independent events, our worry might be that the 1977 or 1978 cut would be in the middle of a flood. If this happened, what remained of these flood events in the time series would have to be removed because there would be uncertainty about the behaviour of the flood event when there weren't records (during 1977-1978). We wouldn't know how high the river flow peaked at, and therefore what peak flow to record when extracting the peaks. As it turns out, the last and first (respectively) flows of 1977 and 1978 are not part of flood events as can be seen in the graphs.
+Similarly for the missing values in 2015.
 
 ![2015 Analysis](results/figures/2015_analysis.png)
 
-Similarly for the missing values in 2015.
+However it is necessary to remove the flood event at the very beginning of the dataset (set all values to 0). The cut at the end of the dataset, like the cuts for 1977 and 1978, is fine. 
 
 ![1959 Edge Analysis](results/figures/1959_edge_analysis.png)
-
-However it is necessary to remove the flood event at the very beginning of the dataset. The cut at the end of the dataset, like the cuts for 1977 and 1978, is fine. 
 
 The Flood Estimation Handbook gives these as the tests for independence:
 
@@ -63,53 +63,58 @@ We can see single-peaked events typically have neighbouring troughs that are bel
 
 ### Distribution fitting
 
-The GPD has three parameters; shape ($\xi$), location ($\mu$), and scale ($\sigma$)
+The GPD has three parameters; shape ($\xi$), location ($\mu$), and scale ($\sigma$). We only consider the case $\xi > 0$ 
 
-$$
-F_{\mu,\sigma,\xi}(x)=
-\begin{cases}
-1-\left(1+\xi\frac{x-\mu}{\sigma}\right)^{-1/\xi}, & \text{for } \xi \neq 0,\\[1.2em]
-1-\exp\left(-\frac{x-\mu}{\sigma}\right), & \text{for } \xi = 0.
-\end{cases}
-$$
+```math
+F_{\mu,\sigma,\xi}(x)
+=
+1-\left(1+\xi\frac{x-\mu}{\sigma}\right)^{-1/\xi},
+\qquad \xi>0.
+```
 
 For the peak data, location parameter is the threshold. Changing all the peak data to peak data over threhold, we've effectively fixed the location paramter to 0. This helps with simplifying solving for the MLEs of the shape and scale parameters. Solving for MLEs the standard way by taking partial derivatives of the log-likelihood:
 
-$$
-\ell(\sigma,\xi;\mathbf{x})
-=-n\log \sigma-\left(\frac{1}{\xi}+1\right)\sum_{i=1}^n
-\log\!\left(1+\xi \frac{x_i}{\sigma}\right).
-$$
+```math
+\ell(\sigma,\xi;\mathbf{y})
+=
+-n\log\sigma
+-
+\left(\frac{1}{\xi}+1\right)
+\sum_{i=1}^{n}
+\log\left(1+\xi\frac{y_i}{\sigma}\right).
+```
 
 The system:
 
-$$
-\frac{\partial \ell}{\partial \sigma}
+```math
+\frac{\partial\ell}{\partial\sigma}
 =
 -\frac{n}{\sigma}
 +
 \frac{1+\xi}{\sigma}
 \sum_{i=1}^{n}
-\frac{x_i}{\sigma+\xi x_i}
-=0.
-$$
+\frac{y_i}{\sigma+\xi y_i}
+=
+0,
+```
 
 and
 
-$$
-\frac{\partial \ell}{\partial \xi}
+```math
+\frac{\partial\ell}{\partial\xi}
 =
 \frac{1}{\xi^2}
 \sum_{i=1}^{n}
-\log\left(1+\frac{\xi x_i}{\sigma}\right)
+\log\left(1+\xi\frac{y_i}{\sigma}\right)
 -
 \left(1+\frac{1}{\xi}\right)
 \sum_{i=1}^{n}
-\frac{x_i}{\sigma+\xi x_i}
-=0.
-$$
+\frac{y_i}{\sigma+\xi y_i}
+=
+0.
+```
 
-Has no closed form expression for the solution. Therefore solution by numerical approximation is used in scipy to solve for the shape and scale MLEs given the data. 
+has no closed form expression for the solution. Therefore solution by numerical approximation is used in scipy to solve for the shape and scale MLEs given the data. 
 
 ### Statistical tests
 

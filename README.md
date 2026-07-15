@@ -8,15 +8,15 @@ How can we calculate probabilities of different flood events? This project uses 
 
 ## Methodology
 
-1. We will find all peaks in the time series data and then subject them to the standard independence tests  of the UK Centre for Ecology & Hydrology - see page 276 of the Flood Estimation Handbook Volume 3 Statistical procedures for flood frequency estimation [linked at the bottom of this webpage](https://www.ceh.ac.uk/data/software-models/flood-estimation-handbook). We need independent flood events to apply our limiting theorem (below), just like in the CLT how we need iid random variables. Then filter out smaller peaks so that the n largest independent peaks remain, where n is 5 times the number of years of data.
+1. We will find all peaks in the time series data and then subject them to the standard independence tests  of the UK Centre for Ecology & Hydrology - see page 276 of the Flood Estimation Handbook Volume 3 Statistical procedures for flood frequency estimation linked at the bottom of [this webpage](https://www.ceh.ac.uk/data/software-models/flood-estimation-handbook). We need independent flood events to apply our limiting theorem (below), just like in the CLT how we need iid random variables. Then filter out smaller peaks so that the n largest independent peaks remain, where n is 5 times the number of years of data.
 
 2. We use the [Pickands-Balkema-de Haan theorem](https://en.wikipedia.org/wiki/Pickands%E2%80%93Balkema%E2%80%93De_Haan_theorem) as a limiting theorem for threshold probabilities, ie probabilities of the form:
 
-    ```math
-    F(y)=\Pr(X-u\le y\mid X>u)
-    ```
+ ```math
+F(y)=\Pr(X-u\le y\mid X>u)
+```
 
-    where $u$ is the threshold (in peaks over threshold) and $X$ is a random variable whose distribution we do not know.
+    where u is the threshold (in peaks over threshold) and X is a random variable whose distribution we do not know.
 
     It states that the conditional excess distribution is well approximated by a Generalized Pareto distribution for sufficiently large thresholds.
 

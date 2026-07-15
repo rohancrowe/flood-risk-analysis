@@ -47,6 +47,7 @@ However it is necessary to remove the flood event at the very beginning of the d
 The Flood Estimation Handbook gives these as the tests for independence:
 
 Test 1: "The two peaks must be separated by at least three times the average time to rise." 
+
 Test 2: "The minimum discharge in the trough between two peaks must be less than two-thirds of the discharge of the first of the two peaks." 
 
 The average time to rise is calculated by taking the mean of the time from trough to peak for all candidate single (ie not multi) peaks and is reflective of how quick an independent rain event turns into an independent flood event based on the nearby water table, geology etc... This suggests the following algorithm:

@@ -12,15 +12,15 @@ How can we calculate probabilities of different flood events? This project uses 
 
 2. We use the [Pickands-Balkema-de Haan theorem](https://en.wikipedia.org/wiki/Pickands%E2%80%93Balkema%E2%80%93De_Haan_theorem) as a limiting theorem for threshold probabilities, ie probabilities of the form:
 
-$$
-F(y) = P(X - u \leq y \mid X > u)
-$$
+    ```math
+    F(y)=\Pr(X-u\le y\mid X>u)
+    ```
 
-u is the threshold (in peaks over threshold), X is a random variable whose distribution we don't know
+    where $u$ is the threshold (in peaks over threshold) and $X$ is a random variable whose distribution we do not know.
 
-It states the distribution above is well approximated by a [generalised Pareto distribution](https://en.wikipedia.org/wiki/Generalized_Pareto_distribution) (for large u). It's like a CLT for conditional excess ditributions (F(y) above). 
+    It states that the conditional excess distribution is well approximated by a Generalized Pareto distribution for sufficiently large thresholds.
 
-The generalised Pareto distribtion (GPD) is fit to the data using the MLEs.
+    The generalised Pareto distribtion (GPD) is fit to the data using the MLEs.
 
 3. We test the fit using Kolmogrov-Smirnov test with bootstrapping (because we've "trained" our model on the same data we're about to test its fit with). 
 
@@ -55,11 +55,11 @@ The average time to rise is calculated by taking the mean of the time from troug
 2. Subject these peaks to independence tests, if a peak fails an independence test, remove it from the dataset
 3. Choose a threshold that has on average 5 peaks over the threshold per year
 
-Test 1 is hard to implement. How do we calculate any single "time to rise"? Using guidance from the Flood Estimation Handbook, we find n single-peaked events, find their time to rise, and average them. To calculate a single-peaked time to rise we look at the closest previous trough and the peak and find the time between them. We'll define a single peaked event as having its two neighbouring troughs below the mean flow rate of the river, ie back to normal river flow behaviour. The figure below should justify this working:
+Test 1 is hard to implement. How do we calculate any single "time to rise"? Using guidance from the Flood Estimation Handbook, we find n single-peaked events, find their time to rise, and average them. To calculate a single-peaked time to rise we look at the closest previous trough and the peak and find the time between them. We'll define a single peaked event as having its two neighbouring troughs below the mean flow rate of the river, ie back to normal river flow behaviour.
 
 ![2010 River Flow](results/figures/2010.png)
 
-We can see single-peaked events typically have neighbouring troughs that are below the mean flow rate.
+We can see single-peaked events typically have neighbouring troughs that are below the mean flow rate. However, visually the single peaks come in groups, arguably rain fall being more likely in a period of high rain fall means these events are not independent, but then you could argue a large period of drought implies a higher probability the next event is a period of rainfall. It is difficult to know where to draw the line for independence of flood events, this is some point where the analysis is arguably weaker.
 
 ### Distribution fitting
 
@@ -89,12 +89,6 @@ The system:
 ```math
 \frac{\partial\ell}{\partial\sigma}
 =
--\frac{n}{\sigma}
-+
-\frac{1+\xi}{\sigma}
-\sum_{i=1}^{n}
-\frac{y_i}{\sigma+\xi y_i}
-=
 0,
 ```
 
@@ -102,14 +96,6 @@ and
 
 ```math
 \frac{\partial\ell}{\partial\xi}
-=
-\frac{1}{\xi^2}
-\sum_{i=1}^{n}
-\log\left(1+\xi\frac{y_i}{\sigma}\right)
--
-\left(1+\frac{1}{\xi}\right)
-\sum_{i=1}^{n}
-\frac{y_i}{\sigma+\xi y_i}
 =
 0.
 ```

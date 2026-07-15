@@ -54,13 +54,15 @@ ax.plot(time_series.index, time_series["river flow (m3/s)"], linewidth=0.8)
 ax.set_title("River Flow Time Series")
 ax.set_xlabel("date")
 ax.set_ylabel("river flow (m³/s)")
+ax.set_ylim(bottom=0)
+# ax.set_xlim(time_series.index.min(), time_series.index.max())
 
 ax.grid(True)
 
 plt.tight_layout()
 
-# plt.savefig("flood-risk-analysis/results/overall_time_series.png", dpi=300)
-# plt.show()
+plt.savefig(project_root / "results" / "figures" / "overall_time_series.png", dpi=300)
+plt.show()
 
 # Time series around the NaN values
 
@@ -80,7 +82,7 @@ ax.axvline(x = pd.Timestamp("1977-01-01") , color = "red", linestyle = ":", line
 
 ax.legend()
 
-# plt.savefig("flood-risk-analysis/results/1977_cut_analysis.png", dpi=300)
+# plt.savefig(project_root / "results" / "figures" / "1977_cut_analysis.png", dpi=300)
 # plt.show()
 
 fig, ax = plt.subplots(figsize=(12, 6))
@@ -96,7 +98,7 @@ ax.axvline(x = pd.Timestamp("1978-12-31") , color = "red", linestyle = ":", line
 
 ax.legend()
 
-# plt.savefig("flood-risk-analysis/results/1978_cut_analysis.png", dpi=300)
+# plt.savefig(project_root / "results" / "figures" / "1978_cut_analysis", dpi=300)
 # plt.show()
 
 
@@ -119,7 +121,7 @@ ax.axhline(y = river_flow_mean , color = "green" , linewidth = 1, label = "mean 
 
 ax.legend()
 
-# plt.savefig("flood-risk-analysis/results/1959_edge_analysis.png", dpi=300)
+# plt.savefig(project_root / "results" / "figures" / "1959_edge_analysis", dpi=300)
 # plt.show()
 
 # The trough here is at 1959-01-08, therefore we set these values to 0 to remove the peak
@@ -144,7 +146,7 @@ ax.axvline(x = pd.Timestamp("2015-12-13") , color = "red", linestyle = ":", line
 
 ax.legend()
 
-# plt.savefig("flood-risk-analysis/results/2015_analysis.png", dpi=300)
+# plt.savefig(project_root / "results" / "figures" / "2015_analysis.png", dpi=300)
 # plt.show()
 
 # Looking at the graph, the NaN values are extremely unlikely to have contributed to a peak so we can move on to independence tests
@@ -241,7 +243,11 @@ mean_rise_time = single_peaks_results["time_to_previous_trough"].mean()
 # ax.set_ylabel("river flow (m³/s)")
 # ax.axhline(y = river_flow_mean , color = "green" , linewidth = 1, label = "mean flow")
 # ax.legend()
-# plt.savefig("flood-risk-analysis/results/2010.png", dpi=300)
+# ax.set_ylim(bottom=0)
+# ax.set_xlim(pd.Timestamp("2010-01-01"), pd.Timestamp("2010-12-31"))
+# ax.grid(True)
+
+# plt.savefig(project_root / "results" / "figures" / "2010.png", dpi=300)
 # plt.show()
 
 
@@ -288,8 +294,8 @@ processed_data = test_2_results.nlargest(334, "peak_flow").sort_values("peak_dat
 
 processed_data = processed_data[["peak_date", "peak_flow"]]
 
-processed_data.to_csv("flood-risk-analysis/data/processed/independent_peaks.csv", index=False)
+# processed_data.to_csv("flood-risk-analysis/data/processed/independent_peaks.csv", index=False)
 
-pd.DataFrame({"POT_threshold": [POT_threshold]}).to_csv("flood-risk-analysis/data/processed/POT_threshold.csv", index=False)
+# pd.DataFrame({"POT_threshold": [POT_threshold]}).to_csv("flood-risk-analysis/data/processed/POT_threshold.csv", index=False)
 
 

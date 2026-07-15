@@ -12,15 +12,15 @@ How can we calculate probabilities of different flood events? This project uses 
 
 2. We use the [Pickands-Balkema-de Haan theorem](https://en.wikipedia.org/wiki/Pickands%E2%80%93Balkema%E2%80%93De_Haan_theorem) as a limiting theorem for threshold probabilities, ie probabilities of the form:
 
- ```math
-F(y)=\Pr(X-u\le y\mid X>u)
-```
+    $$
+    F(y)=\Pr(X-u\le y\mid X>u)
+    $$
 
-    where u is the threshold (in peaks over threshold) and X is a random variable whose distribution we do not know.
+   where u is the threshold (in peaks over threshold) and X is a random variable whose distribution we do not know.
 
-    It states that the conditional excess distribution is well approximated by a Generalized Pareto distribution for sufficiently large thresholds.
+   It states that the conditional excess distribution is well approximated by a Generalized Pareto distribution for sufficiently large thresholds.
 
-    The generalised Pareto distribtion (GPD) is fit to the data using the MLEs.
+   The generalised Pareto distribtion (GPD) is fit to the data using the MLEs.
 
 3. We test the fit using Kolmogrov-Smirnov test with bootstrapping (because we've "trained" our model on the same data we're about to test its fit with). 
 

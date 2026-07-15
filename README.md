@@ -80,27 +80,11 @@ For the peak data, location parameter is the threshold. Changing all the peak da
 -n\log\sigma
 -
 \left(\frac{1}{\xi}+1\right)
-\sum_{i=1}^{n}
-\log\left(1+\xi\frac{y_i}{\sigma}\right).
+\displaystyle\sum\limits_{i=1}^{n}
+\log\left(1+\frac{\xi y_i}{\sigma}\right).
 ```
 
-The system:
-
-```math
-\frac{\partial\ell}{\partial\sigma}
-=
-0,
-```
-
-and
-
-```math
-\frac{\partial\ell}{\partial\xi}
-=
-0.
-```
-
-has no closed form expression for the solution. Therefore solution by numerical approximation is used in scipy to solve for the shape and scale MLEs given the data. 
+The non-linear system formed by setting the partial derivatives equal to zero has no closed form expression for the solution. Therefore solution by numerical approximation is used in scipy to solve for the shape and scale MLEs given the data. 
 
 ### Statistical tests
 
